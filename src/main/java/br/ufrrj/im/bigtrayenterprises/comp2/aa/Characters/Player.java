@@ -36,9 +36,9 @@ public class Player extends Character {
         }
 
         if (attr.getCarryCapacity() < item.getWeight() + totalWeight) {
-            Engine.source.printString("Inventário muito cheio!");
+            Engine.source.printString("\n\nInventário muito cheio!");
         } else {
-            Engine.source.printString("Item adicionado ao inventário!");
+            Engine.source.printString("\n\nItem adicionado ao inventário!");
             inventory.add(item);
         }
     }
@@ -58,7 +58,7 @@ public class Player extends Character {
             default:
                 throw new IllegalArgumentException("Attempted to equip an unequippable item");
         }
-        Engine.source.printString("Equipou " + item.getName());
+        Engine.source.printString("\n\nEquipou " + item.getName());
     }
 
     public Collection<Usable> getUsables() {
@@ -75,6 +75,24 @@ public class Player extends Character {
         return retval;
     }
 
+    public boolean getGarilho1() {
+        return gatilho1;
+    }
+
+    public boolean getGarilho2() {
+        return gatilho2;
+    }
+
+    public void setGarilho1(boolean booleano) {
+        this.gatilho1 = booleano;
+    }
+
+    public void setGarilho2(boolean booleano) {
+        this.gatilho2 = booleano;
+    }
+
     private Collection<Skill> skills;
     private Collection<Item> inventory;
+    private boolean gatilho1 = false;
+    private boolean gatilho2 = false;
 }
