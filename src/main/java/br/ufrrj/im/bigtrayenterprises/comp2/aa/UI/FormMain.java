@@ -23,7 +23,7 @@ public class FormMain implements IOSource, ActionListener {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(300, 300);
+        frame.setSize(900, 600);
 
 
         Engine eng = new Engine();
@@ -46,7 +46,8 @@ public class FormMain implements IOSource, ActionListener {
 
     @Override
     public void printString(String str) {
-        outputArea.append(str + "\n");
+        // HACK(victor): JTextAreas do word wrapping, so leave the newlining to them
+        outputArea.append(str.replace("\n", "") + "\n");
     }
 
     @Override

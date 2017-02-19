@@ -9,6 +9,7 @@ import br.ufrrj.im.bigtrayenterprises.comp2.aa.Usable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * Created by filipebraida on 31/05/16.
@@ -19,6 +20,7 @@ public class Player extends Character {
 
         this.skills = new ArrayList<>();
         this.inventory = new ArrayList<>();
+        this.triggers = new HashMap<>();
 
         addSkill(new AutoAttack());
     }
@@ -93,6 +95,8 @@ public class Player extends Character {
 
     private Collection<Skill> skills;
     private Collection<Item> inventory;
+
+    private HashMap<String, Boolean> triggers;
     private boolean gatilho1 = false;
     private boolean gatilho2 = false;
 }

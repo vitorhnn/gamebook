@@ -5,9 +5,7 @@ import br.ufrrj.im.bigtrayenterprises.comp2.aa.Characters.Character;
 import br.ufrrj.im.bigtrayenterprises.comp2.aa.Characters.Player;
 import br.ufrrj.im.bigtrayenterprises.comp2.aa.Choices.BlankChoice;
 import br.ufrrj.im.bigtrayenterprises.comp2.aa.Choices.Choice;
-import br.ufrrj.im.bigtrayenterprises.comp2.aa.Events.BattleEvent;
-import br.ufrrj.im.bigtrayenterprises.comp2.aa.Events.BlankEvent;
-import br.ufrrj.im.bigtrayenterprises.comp2.aa.Events.Event;
+import br.ufrrj.im.bigtrayenterprises.comp2.aa.Events.*;
 import br.ufrrj.im.bigtrayenterprises.comp2.aa.Items.Item;
 import br.ufrrj.im.bigtrayenterprises.comp2.aa.Items.ItemType;
 import br.ufrrj.im.bigtrayenterprises.comp2.aa.Skills.AutoAttack;
@@ -161,90 +159,6 @@ public class Engine {
             }
         };
 
-        Item tacape =
-                new Item(
-                        "Tacape",
-                        new AttributeBuilder()
-                                .setAgility(1)
-                                .setStrength(0)
-                                .setResistance(0)
-                                .setArmor(2)
-                                .setFirepower(4)
-                                .createAttributes(),
-                        6,
-                        ItemType.WEAPON
-                );
-
-        Item presa30 =
-                new Item(
-                        "Dente de Adaga",
-                        new AttributeBuilder()
-                                .setAgility(3)
-                                .setStrength(0)
-                                .setResistance(0)
-                                .setArmor(0)
-                                .setFirepower(2)
-                                .createAttributes(),
-                        3,
-                        ItemType.WEAPON
-                );
-
-        Item morningStar =
-                new Item(
-                        "Morningstar",
-                        new AttributeBuilder()
-                                .setAgility(0)
-                                .setStrength(0)
-                                .setResistance(0)
-                                .setArmor(1)
-                                .setFirepower(5)
-                                .createAttributes(),
-                        10,
-                        ItemType.WEAPON
-                );
-
-        Item manto =
-                new Item(
-                        "Poção de Vida",
-                        new AttributeBuilder()
-                                .setAgility(2)
-                                .setStrength(0)
-                                .setResistance(0)
-                                .setArmor(1)
-                                .setFirepower(0)
-                                .createAttributes(),
-                        5,
-                        ItemType.ARMOR
-                );
-
-        Item armadura =
-                new Item(
-                        "Armadura de Couro",
-                        new AttributeBuilder()
-                                .setAgility(1)
-                                .setStrength(0)
-                                .setResistance(3)
-                                .setArmor(3)
-                                .setFirepower(0)
-                                .createAttributes(),
-                        20,
-                        ItemType.ARMOR
-                );
-
-        Item cordao =
-                new Item(
-                        "Cordão de Ritos",
-                        new AttributeBuilder()
-                                .setAgility(2)
-                                .setStrength(2)
-                                .setResistance(0)
-                                .setArmor(0)
-                                .setFirepower(0)
-                                .createAttributes(),
-                        2,
-                        ItemType.AMULET
-                );
-
         Event end2 = new BlankEvent(
                 new ArrayList<>(),
                 "\n\n\n\n\n\n\n\nVocê decide ficar e enfrentar o pior. \n" +
@@ -296,9 +210,28 @@ public class Engine {
 
         Event treinoCompleto = new BlankEvent(
                 escolhas,
-                "\n\n\n\n\n\n\n\nTreino completo. A criatura deixa cair uma armadura ao morer, você tenta equipar. O que será feito agora?",
-                player, armadura, 0
-        );
+                "\n\n\n\n\n\n\n\nTreino completo. A criatura deixa cair uma armadura ao morer, você tenta equipar. O que será feito agora?"
+        ) {
+            @Override
+            public void applyHistory(Player player) {
+                Item armadura =
+                        new Item(
+                                "Armadura de Couro",
+                                new AttributeBuilder()
+                                        .setAgility(1)
+                                        .setStrength(0)
+                                        .setResistance(3)
+                                        .setArmor(3)
+                                        .setFirepower(0)
+                                        .createAttributes(),
+                                20,
+                                ItemType.ARMOR
+                        );
+
+                player.addItem(armadura);
+                player.equipItem(armadura);
+            }
+        };
 
         //BattleEvent treinar1 = new BattleEvent(treinoCompleto, cultista, player);
         BattleEvent treinar2 = new BattleEvent(treinoCompleto, zumbi, player);
@@ -395,11 +328,11 @@ public class Engine {
                 "\n\n\n\n\n\n\n\nVocê não fez nada."
         );
 
-        Event girouAleatoriamente = new BlankEvent(
+        Event girouAleatoriamente = new DamageEvent(
                 escolhas,
                 "\n\n\n\n\n\n\n\nEm algum momento, você gira uma costela que aciona mecanismos presentes na parede atrás da estátua, que revela um buraco. Nele, há uma garrafa com um líquido rosa escuro. Você \n" +
                         "bebe o conteúdo da garrafa e recupera vida.",
-                player, -10
+                -10
         );
 
         Event formouUmV = new BlankEvent(
@@ -407,6 +340,7 @@ public class Engine {
                 "\n\n\n\n\n\n\n\nAo fazer isso, mecanismos dentro da estátua são acionados e expressão do rosto dela muda, seus olhos e boca são abertos, revelendo buracos. De repente, uma espécie de névoa\n" +
                         "roxa sai desses buracos e ela fica a sua volta. Você sente seu corpo, de alguma forma, absorvendo aquela névoa para dentro até que não haja mais dela presente."
                 // PEGADOR DE SKILL AKI ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^~
+                // NOTE(victor): éoq?
         );
 
         BlankChoice fazerNada = new BlankChoice("Fazer nada", fezNada);
@@ -444,9 +378,28 @@ public class Engine {
         Event atacandoSorrateiramente3 = new BlankEvent(
                 escolhas,
                 "\n\n\n\n\n\n\n\nCom ambas criaturas mortas, o ser encapuzado se aproxima de você. Ele lhe agradece e te dá um manto igual aos dos outros e segue para a outra porta. Após um tempo\n" +
-                        "você vai pelo mesmo caminho. ",
-                player, manto, 0
-        );
+                        "você vai pelo mesmo caminho. "
+        ) {
+            @Override
+            public void applyHistory(Player player) {
+                Item manto =
+                        new Item(
+                                "Poção de Vida",
+                                new AttributeBuilder()
+                                        .setAgility(2)
+                                        .setStrength(0)
+                                        .setResistance(0)
+                                        .setArmor(1)
+                                        .setFirepower(0)
+                                        .createAttributes(),
+                                5,
+                                ItemType.ARMOR
+                        );
+
+                player.addItem(manto);
+                player.equipItem(manto);
+            }
+        };
 
         BattleEvent combateMonstro = new BattleEvent(atacandoSorrateiramente3, monstro, player);
 
@@ -525,9 +478,28 @@ public class Engine {
         Event puxou3 = new BlankEvent(
                 escolhas,
                 "\n\n\n\n\n\n\n\nAo fazer isso, você escuta barulhos, que surgem por dentro das paredes e do teto, até que de repente, uma parte da parede do corredor se abre de forma mecânica, revelando\n" +
-                        "uma morningstar. Você tenta equipar o item",
-                player, morningStar, 0
-        );
+                        "uma morningstar. Você tenta equipar o item"
+        ) {
+            @Override
+            public void applyHistory(Player player) {
+                Item star =
+                        new Item(
+                                "Morningstar",
+                                new AttributeBuilder()
+                                        .setAgility(0)
+                                        .setStrength(0)
+                                        .setResistance(0)
+                                        .setArmor(1)
+                                        .setFirepower(5)
+                                        .createAttributes(),
+                                10,
+                                ItemType.WEAPON
+                        );
+
+                player.addItem(star);
+                player.equipItem(star);
+            }
+        };
 
         BlankChoice ignorar = new BlankChoice("Ignorar alavanca", ignorou3);
         BlankChoice puxar = new BlankChoice( "Puxar alavanca", puxou3);
@@ -549,11 +521,11 @@ public class Engine {
                 "\n\n\n\n\n\n\n\nVocê simplesmente ignora as possibilidades que puxar a tocha-alavanca poderia lhe trazer."
         );
 
-        Event puxou2 = new BlankEvent(
+        Event puxou2 = new DamageEvent(
                 escolhas,
                 "\n\n\n\n\n\n\n\nAo fazer isso, você escuta barulhos, que surgem por dentro das paredes e do teto, até que de repente, chamas surgem de pequenos buracos no teto e vão em sua direção. \n" +
                         "Você consegue até escapar da armadilha, mas não totalmente ileso, o calor te machucou bastante.",
-                player, 10
+                10
         );
 
         ignorar = new BlankChoice("Ignorar alavanca", ignorou2);
@@ -576,11 +548,11 @@ public class Engine {
                 "\n\n\n\n\n\n\n\nVocê ignora as possibilidades que puxar a tocha-alavanca poderia lhe trazer."
         );
 
-        Event puxou = new BlankEvent(
+        Event puxou = new DamageEvent(
                 escolhas,
                 "\n\n\n\n\n\n\n\nAo fazer isso, você escuta barulhos, que surgem por dentro das paredes e do teto, até que de repente, flechas surgem de pequenos buracos no teto e vão em sua direção. \n" +
                         "Você consegue até escapar da armadilha, mas não totalmente ileso, uma das flechas machucou sua perna.",
-                player, 5
+                5
         );
 
         ignorar = new BlankChoice("Ignorar alavanca", ignorou);
@@ -626,9 +598,29 @@ public class Engine {
                         "Repetindo esse processo, os dentes parecem estarem sendo muito forçados e sendo arrancados e cada vez mais você sente seu braço sendo soltado. Após algum tempo, \n" +
                         "você finalmente livra seu braço daquilo, trazendo alguns dentes que ficaram presos em sua pele. Um dente, por sorte, não perfurou sua pele profundamente, mas\n" +
                         "mesmo assim fora arrancado no processo, caindo no chão, uma presa de cerca de 35 centímetros, com o formato das presas de um grande predador. Você tenta equipar \n" +
-                        "o item",
-                player, presa30, 5
-        );
+                        "o item"
+        ) {
+            @Override
+            public void applyHistory(Player player) {
+                Item presa =
+                        new Item(
+                                "Dente de Adaga",
+                                new AttributeBuilder()
+                                        .setAgility(3)
+                                        .setStrength(0)
+                                        .setResistance(0)
+                                        .setArmor(0)
+                                        .setFirepower(2)
+                                        .createAttributes(),
+                                3,
+                                ItemType.WEAPON
+                        );
+                player.addItem(presa);
+                player.equipItem(presa);
+
+                player.changeHealth(-5);
+            }
+        };
 
         BlankChoice colocarBraco = new BlankChoice("Colocar o braço lá dentro e alcançar a maçaneta", colocouOBraco);
         BlankChoice atacarTecido = new BlankChoice("Atacar o tecido e tentar tirá-lo", atacouOTecido);
@@ -719,12 +711,12 @@ public class Engine {
                 "\n\n\n\n\n\n\n\nVendo a possibilidade de cair em um abismo, você decide que é melhor não arriscar a vida por uma lamparina."
         );
 
-        Event pegouLamparina = new BlankEvent(
+        Event pegouLamparina = new TriggerEvent(
                 escolhas,
                 "\n\n\n\n\n\n\n\nCom coragem, você decide subir na estrutura. Após ficar em pé em cima dela, o arrenpedimento surge ao perceber que se aquilo ruir, um abismo negro é o que lhe espera, não\n" +
                         "é possível saber o quão fundo o poço é, nem visualizar o balde. Com alguns cuidadosos passos, porém, a lamparina é alcançada, retirada do guancho e fixada ao seu cinto,\n" +
                         "podendo ser utilizada e deixando as mãos livres.",
-                        false, player
+                false
         );
 
         BlankChoice cagarParaLamparina = new BlankChoice("Não se arriscar", cagouParaLamparina);
@@ -823,11 +815,11 @@ public class Engine {
                 "\n\n\n\n\n\n\n\nVocê não acha uma boa ideia encostar na parede e decide não fazê-lo."
         );
 
-        Event encostouNaParede = new BlankEvent(
+        Event encostouNaParede = new DamageEvent(
                 escolhas,
                 "\n\n\n\n\n\n\n\nAo encostar a mão na parede, você sente como se estivesse tocando em musgo bem úmido. Depois de alguns passos, você sente uma espécie de buraco, com algo pontiagudo ao\n" +
                         "redor dele. Você decide tirar a mão dali após sentir que um pedacinho da sua mão foi arrancado repentinamente.",
-                player, 5
+                5
         );
 
         BlankChoice cagarParaParede = new BlankChoice("Não tocar na parede e continuar andando", cagouParaParede);
@@ -848,20 +840,37 @@ public class Engine {
         escolhas = new ArrayList<>();
         escolhas.add(continuar);
 
-        Event naoTocouEmNada = new BlankEvent(
+        Event naoTocouEmNada = new TriggerEvent(
                 escolhas,
                 "\n\n\n\n\n\n\n\nVocê simplesmente observa a criatura horrenda. Se era humano, como poderia ter ficado desse jeito? E ainda viva até esse momento? Porém, nota-se que, lentamente, a \n" +
                         "respiração dela torna-se mais fraca, até deixar de existir. Você nota que dois ossos da costela, um de cada lado, estão espostos e formam uma espécie de V de cabeça para\n" +
                         "baixo. Você se retira do local.",
-                true, player
+                true
         );
 
         Event puxouComForca = new BlankEvent(
                 escolhas,
                 "\n\n\n\n\n\n\n\nVocê posiciona alguns dedos cobrindo a corrente e, repentinamente, puxa com grande força. A criatura solta um grito de agonia que cessa tão rápido quanto começou, \n" +
-                        "aparentemente o seu ato a matou. Um cordão era o que estava nas entranhas. Você equipa o item e sai do local.",
-                player, cordao, 0
-        );
+                        "aparentemente o seu ato a matou. Um cordão era o que estava nas entranhas. Você equipa o item e sai do local."
+        ) {
+            @Override
+            public void applyHistory(Player player) {
+                Item cordao =
+                        new Item("Cordão de Ritos",
+                                new AttributeBuilder()
+                                        .setAgility(2)
+                                        .setStrength(2)
+                                        .setResistance(0)
+                                        .setArmor(0)
+                                        .setFirepower(0)
+                                        .createAttributes(),
+                                2,
+                                ItemType.AMULET
+                        );
+                player.addItem(cordao);
+                player.equipItem(cordao);
+            }
+        };
 
         Event puxouDevagar2 = new BlankEvent(
                 escolhas,
@@ -913,9 +922,26 @@ public class Engine {
                 escolhas,
                 "\n\n\n\n\n\n\n\nVocê acorda em um local escuro, iluminado por tochas. Você se encontra em algum tipo de construção, dentro de uma caverna provavelmente, sua cama de pedra fora cuidadosamente \n" +
                         "esculpida. Ao seu lado esquerdo, uma cama similar está vazia, ao direito, outra cama está ocupada com algum ser vivo deformado que começa a emitir sons altos e pertubadores. Próximo \n" +
-                        "a sua cama, há um tacape que você pega. O que será feito?",
-                player, tacape, 0
-        );
+                        "a sua cama, há um tacape que você pega. O que será feito?"
+        ) {
+            @Override
+            public void applyHistory(Player player) {
+                Item tacape =
+                        new Item(
+                                "Tacape",
+                                new AttributeBuilder()
+                                        .setAgility(1)
+                                        .setStrength(0)
+                                        .setResistance(0)
+                                        .setArmor(2)
+                                        .setFirepower(4)
+                                        .createAttributes(),
+                                6,
+                                ItemType.WEAPON
+                        );
+                player.equipItem(tacape);
+            }
+        };
 
         return new Book("...", inicial, player);
     }
