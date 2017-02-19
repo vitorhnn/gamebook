@@ -1,6 +1,6 @@
 package br.ufrrj.im.bigtrayenterprises.comp2.aa.Events;
 
-import br.ufrrj.im.bigtrayenterprises.comp2.aa.Characters.Character;
+import br.ufrrj.im.bigtrayenterprises.comp2.aa.Characters.Player;
 import br.ufrrj.im.bigtrayenterprises.comp2.aa.Choices.Choice;
 
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public abstract class Event {
         return null;
     }
 
-    public abstract void applyHistory(Character character);
+    public abstract void applyHistory(Player player);
 
     private String description;
     private Collection<Choice> choices;

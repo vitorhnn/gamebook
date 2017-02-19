@@ -1,7 +1,6 @@
 package br.ufrrj.im.bigtrayenterprises.comp2.aa.Events;
 
 import br.ufrrj.im.bigtrayenterprises.comp2.aa.Characters.AICharacter;
-import br.ufrrj.im.bigtrayenterprises.comp2.aa.Characters.Character;
 import br.ufrrj.im.bigtrayenterprises.comp2.aa.Characters.Player;
 import br.ufrrj.im.bigtrayenterprises.comp2.aa.Choices.BattleChoice;
 import br.ufrrj.im.bigtrayenterprises.comp2.aa.Choices.Choice;
@@ -54,7 +53,7 @@ public class BattleEvent extends Event {
     }
 
     @Override
-    public void applyHistory(Character character) {
+    public void applyHistory(Player player) {
         // nothing!
     }
 
