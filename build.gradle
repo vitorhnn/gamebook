@@ -2,12 +2,18 @@
 // around the Java compiler to compile their .form files.
 // Thanks to https://www.grahamedgecombe.com/blog/2013/04/03/using-intellij-ideas-javac2-in-gradle for this.
 
-plugins {
-    id 'com.github.johnrengelman.shadow' version '1.2.3'
+buildscript {
+    ext.kotlin_version = '1.0.5'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
 }
 
-configurations {
-    antTask
+plugins {
+    id 'com.github.johnrengelman.shadow' version '1.2.3'
 }
 
 repositories {
@@ -15,29 +21,18 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    antTask name: 'javac2', version: '12.1.0'
-    antTask name: 'forms_rt', version: '12.1.0'
-    antTask name: 'asm-all', version: '12.1.0-idea'
-    antTask group: 'org.jdom', name: 'jdom', version: '1.1'
-}
 apply plugin: 'java'
+apply plugin: 'kotlin'
 
-task compileJava(overwrite: true, dependsOn: configurations.compile.getTaskDependencyFromProjectDependency(true, 'jar')) {
-    doLast {
-        project.sourceSets.main.output.classesDir.mkdirs()
-        ant.taskdef name: 'javac2', classname: 'com.intellij.ant.Javac2', classpath: configurations.antTask.asPath
-        ant.javac2 srcdir: project.sourceSets.main.java.srcDirs.join(':'),
-                classpath: project.sourceSets.main.compileClasspath.asPath,
-                destdir: project.sourceSets.main.output.classesDir,
-                source: sourceCompatibility,
-                target: targetCompatibility,
-                includeAntRuntime: false
-    }
+dependencies {
+    compile name: 'forms_rt', version: '12.1.0'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
 }
 
 jar {
     manifest {
-        attributes 'Main-Class': 'br.ufrrj.im.bigtrayenterprises.comp2.aa.UI.FormMain'
+        attributes 'Main-Class': 'br.ufrrj.im.bigtrayenterprises.comp2.aa.ui.FormMain'
     }
 }
+

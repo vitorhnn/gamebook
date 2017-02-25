@@ -1,9 +1,9 @@
 package br.ufrrj.im.bigtrayenterprises.comp2.aa;
 
-import br.ufrrj.im.bigtrayenterprises.comp2.aa.Characters.Player;
-import br.ufrrj.im.bigtrayenterprises.comp2.aa.Choices.Choice;
-import br.ufrrj.im.bigtrayenterprises.comp2.aa.Events.BlankEvent;
-import br.ufrrj.im.bigtrayenterprises.comp2.aa.Events.Event;
+import br.ufrrj.im.bigtrayenterprises.comp2.aa.characters.Player;
+import br.ufrrj.im.bigtrayenterprises.comp2.aa.choices.Choice;
+import br.ufrrj.im.bigtrayenterprises.comp2.aa.events.BlankEvent;
+import br.ufrrj.im.bigtrayenterprises.comp2.aa.events.Event;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,25 +12,31 @@ import java.util.Collection;
  * Created by filipebraida on 31/05/16.
  */
 public class Book {
+    private Event currentEvent;
+    private String initialEvent;
+    private String description;
+    private Player player;
 
-    public Book(String description, Event eventInitial, Player player) {
-        this.eventInitial = eventInitial;
+    public Book(String description, String initialEvent, Player player) {
+        this.initialEvent = initialEvent;
         this.description = description;
         this.player = player;
 
         this.resetHistory();
+
+//        this.currentEvent.applyHistory(player);
     }
 
     public void resetHistory() {
-        this.eventActually = this.eventInitial;
+        //  this.currentEvent = this.initialEvent;
     }
 
     public String showHistory() {
-        return this.eventActually.getDescription();
+        return this.currentEvent.getDescription();
     }
 
     public boolean isTheEnd() {
-        return this.eventActually.isEndEvent();
+        return this.currentEvent.isEndEvent();
     }
 
     public String showHistoryBook() {
@@ -44,11 +50,11 @@ public class Book {
             choice.executeChoice(player);
 
             if (player.isAlive()) {
-                this.eventActually = choice.getNextEvent();
-                this.eventActually.applyHistory(player);
+                this.currentEvent = JsonManager.INSTANCE.deserializeEvent(choice.getNextEvent(), player);
+                this.currentEvent.applyHistory(player);
             } else {
                 Event gameOver = new BlankEvent(new ArrayList<Choice>(), "Game Over");
-                this.eventActually = gameOver;
+                this.currentEvent = gameOver;
             }
 
             return true;
@@ -58,15 +64,11 @@ public class Book {
     }
 
     public Choice selectChoice(int number) {
-        return this.eventActually.findChoice(number);
+        return this.currentEvent.findChoice(number);
     }
 
     public Collection<Choice> nextEvents() {
-        return this.eventActually.getChoices();
+        return this.currentEvent.getChoices();
     }
 
-    private Event eventActually;
-    private Event eventInitial;
-    private String description;
-    private Player player;
 }

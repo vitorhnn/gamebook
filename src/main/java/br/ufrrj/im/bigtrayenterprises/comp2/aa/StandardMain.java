@@ -1,6 +1,6 @@
 package br.ufrrj.im.bigtrayenterprises.comp2.aa;
 
-import br.ufrrj.im.bigtrayenterprises.comp2.aa.Choices.Choice;
+import br.ufrrj.im.bigtrayenterprises.comp2.aa.choices.Choice;
 
 import java.util.Scanner;
 

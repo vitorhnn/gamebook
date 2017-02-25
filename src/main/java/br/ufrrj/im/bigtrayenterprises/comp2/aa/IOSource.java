@@ -1,6 +1,6 @@
 package br.ufrrj.im.bigtrayenterprises.comp2.aa;
 
-import br.ufrrj.im.bigtrayenterprises.comp2.aa.Choices.Choice;
+import br.ufrrj.im.bigtrayenterprises.comp2.aa.choices.Choice;
 
 /**
  * Created by vitorhnn on 15/02/17.
